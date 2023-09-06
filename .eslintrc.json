@@ -1,3 +1,39 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-simple-import-sort",
+    "eslint-plugin-tailwindcss",
+    "eslint-plugin-prettier",
+    "jest",
+    "eslint-plugin-jest",
+    "eslint-plugin-react"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended",
+    "next/core-web-vitals",
+    "plugin:jest/recommended"
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "destructuredArrayIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "react-hooks/exhaustive-deps": "off",
+    "import/no-anonymous-default-export": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "tailwindcss/enforces-negative-arbitrary-values": "off",
+    "max-lines": "warn", // Максимальный размер компонента - 300 строк
+    "react/jsx-no-useless-fragment": "warn",
+    "tailwindcss/no-custom-classname": "warn"
+  },
+  "ignorePatterns": ["node_nodules/**", "next/**"]
 }
