@@ -25,7 +25,8 @@ export const Sidebar: FC<Props> = ({ className }) => {
       initial='hidden'
       animate='show'
       className={cn(
-        'flex h-16 w-full items-center justify-center border-solid tablet:h-screen ',
+        'flex h-[72px] w-full items-start justify-center border-solid tablet:h-screen tablet:items-center',
+        'pt-2 tablet:pt-0',
         'border-t-[1px] tablet:border-r-[1px] tablet:border-t-0',
         'fixed bottom-0 tablet:sticky tablet:bottom-auto tablet:top-0',
         'z-[2000] bg-white/80 backdrop-blur-lg',
