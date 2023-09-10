@@ -37,21 +37,17 @@ const generateConfirmationCode = () => {
   return Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
 };
 
-const sendConfirmationCode = (email: string, code: number) => {
-  transporter.sendMail({
+const sendConfirmationCode = async (email: string, code: number) => {
+  const send = await transporter.sendMail({
     from: '"Вжух ✨" <info@oviland.ru>', // sender address
     to: email, // list of receivers
     subject: 'Код подтверждения', // Subject line
     text: `Ваш код подтверждения: ${code}`, // plain text body
     html: `<span>Ваш код подтверждения: <b>${code}</b></span>`, // html body
   });
+
+  console.log('SEND CODE', send);
 };
-
-export async function GET() {
-  const profiles = await prisma.profile.findMany();
-
-  return new Response(JSON.stringify(profiles));
-}
 
 export async function POST(req: Request) {
   const { email, confirmationCode } = await req.json();
@@ -84,6 +80,8 @@ export async function POST(req: Request) {
         email,
       },
     });
+
+    console.log('PROFILE', profile);
 
     const newConfirmationCode = generateConfirmationCode();
 
