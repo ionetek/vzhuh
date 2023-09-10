@@ -74,6 +74,7 @@ export const ConfirmationCodeInput: FC<Props> = ({ onNavigateToEmail }) => {
       .catch(() => {
         toast.error('Ошибка соединения');
       });
+
     setIsLoading(false);
   };
 
