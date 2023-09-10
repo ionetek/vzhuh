@@ -16,6 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='ru'>
+      <link rel='manifest' href='/manifest.json' />
+      <link rel='apple-touch-icon' href='/images/standalone/icon-512.png' />
+      <meta name='apple-mobile-web-app-status-bar-style' content='default' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
       <body className={cn(inter.className)}>
         <Toaster />

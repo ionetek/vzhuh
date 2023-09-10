@@ -1,0 +1,10 @@
+{
+  "name": "Вжух",
+  "short_name": "Вжух",
+  "display": "standalone",
+  "icons": [{
+    "src": "standalone/logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
+}
