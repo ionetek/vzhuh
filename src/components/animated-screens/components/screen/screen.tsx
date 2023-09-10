@@ -34,9 +34,9 @@ export const Screen: FC<PropsWithChildren<Props>> = ({
     <div
       className={cn(
         'absolute z-0 h-full w-full overflow-y-scroll bg-white pb-16 transition-transform !duration-500 ease-linear transition-transform-opacity',
-        'pb-20 desktop:translate-x-0',
+        'pb-20 tablet:translate-x-0',
         {
-          //Mobile & Desktop
+          //Mobile & Tablet
           'z-10 !duration-300': active,
 
           //Mobile
@@ -44,9 +44,9 @@ export const Screen: FC<PropsWithChildren<Props>> = ({
           '-translate-x-full': hiddenPrev,
           'translate-x-full': hiddenNext,
 
-          //Desktop
-          'shadow-none desktop:opacity-100': active,
-          'desktop:opacity-0': hiddenPrev || hiddenNext,
+          //Tablet
+          'shadow-none tablet:opacity-100': active,
+          'tablet:opacity-0': hiddenPrev || hiddenNext,
         }
       )}
       ref={screenRef}

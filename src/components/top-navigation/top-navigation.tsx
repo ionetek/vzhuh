@@ -39,7 +39,7 @@ export const TopNavigation: FC<Props> = ({ center, left, right, title, screenRef
       <div className='sticky top-0 flex items-center justify-between gap-4'>
         <div
           className={cn('absolute left-0 top-0 -z-10 w-full bg-white', {
-            'border-b-[1px] border-solid !bg-white/90 backdrop-blur-md': isScrolled,
+            'border-b-[1px] border-solid !bg-white/90 backdrop-blur-md tablet:border-none': isScrolled,
           })}
           style={{ height: isScrolled ? `calc(100% + ${blurBottomOffset}px)` : '100%' }}
         ></div>

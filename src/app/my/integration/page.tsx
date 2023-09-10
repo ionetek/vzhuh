@@ -14,8 +14,8 @@ import { TopNavigation } from '@/components/top-navigation/top-navigation';
 export default function Integration() {
   const integrationScreenRef = useRef<HTMLDivElement>(null);
   return (
-    <FadedBlock className='container mx-auto'>
-      <Screen screenRef={integrationScreenRef}>
+    <Screen screenRef={integrationScreenRef}>
+      <FadedBlock className='container mx-auto'>
         <TopNavigation center='Интеграция' title='Интеграция' screenRef={integrationScreenRef} />
         <div className='grid w-full grid-cols-[1fr] gap-4 px-4 tablet:grid-cols-[1fr_1fr]'>
           <IntegrationPanel
@@ -50,7 +50,7 @@ export default function Integration() {
             isConnected={false}
           />
         </div>
-      </Screen>
-    </FadedBlock>
+      </FadedBlock>
+    </Screen>
   );
 }

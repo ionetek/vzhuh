@@ -1,5 +1,5 @@
 import cn from 'clsx';
-import { FC, FormEvent } from 'react';
+import { FC, FormEvent, useRef } from 'react';
 
 type Props = {
   label?: string;
@@ -14,6 +14,12 @@ type Props = {
   disabled?: boolean;
   autoFocus?: boolean;
   bgColor?: 'transparent' | 'gray';
+  onBlur?: () => void;
+  keepFocus?: boolean;
+  pattern?: string;
+  autoCapitalize?: string;
+  autoComplete?: string;
+  autoCorrect?: string;
 };
 export const Input: FC<Props> = ({
   label,
@@ -28,7 +34,14 @@ export const Input: FC<Props> = ({
   disabled = false,
   autoFocus = false,
   bgColor = 'gray',
+  keepFocus = false,
+  onBlur,
+  pattern,
+  autoCapitalize,
+  autoCorrect,
+  autoComplete,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
     <label
       className={cn('flex flex-col', {
@@ -38,10 +51,10 @@ export const Input: FC<Props> = ({
     >
       <div className={cn('text-slate-400', variant === 'lg' && 'text-sm')}>{label}</div>
       <input
-        className={cn('w-full appearance-none', className, {
+        className={cn('w-full appearance-none', 'outline-none', className, {
           //Variants
           'h-14 rounded-3xl px-6 py-3': variant === 'xl',
-          'h-11 rounded-2xl px-3 py-1': variant === 'lg',
+          'h-12 rounded-xl px-3 py-1': variant === 'lg',
 
           //bgColor
           'bg-slate-200': bgColor === 'gray',
@@ -55,6 +68,16 @@ export const Input: FC<Props> = ({
         placeholder={placeholder}
         autoFocus={autoFocus}
         disabled={disabled}
+        onBlur={(e) => {
+          e.preventDefault();
+          keepFocus && inputRef.current?.focus();
+          onBlur?.();
+        }}
+        ref={inputRef}
+        pattern={pattern}
+        autoCapitalize={autoCapitalize}
+        autoComplete={autoComplete}
+        autoCorrect={autoCorrect}
       />
     </label>
   );
