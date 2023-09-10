@@ -38,15 +38,13 @@ const generateConfirmationCode = () => {
 };
 
 const sendConfirmationCode = async (email: string, code: number) => {
-  const send = await transporter.sendMail({
+  return await transporter.sendMail({
     from: '"Вжух ✨" <info@oviland.ru>', // sender address
     to: email, // list of receivers
     subject: 'Код подтверждения', // Subject line
     text: `Ваш код подтверждения: ${code}`, // plain text body
     html: `<span>Ваш код подтверждения: <b>${code}</b></span>`, // html body
   });
-
-  console.log('SEND CODE', send);
 };
 
 export async function POST(req: Request) {
@@ -66,11 +64,9 @@ export async function POST(req: Request) {
       data: { code: newConfirmationCode, profileId: profile.id },
     });
 
-    sendConfirmationCode(profile.email, newConfirmationCode);
+    await sendConfirmationCode(profile.email, newConfirmationCode);
 
-    const response = STATUSES.CONFIRM_EMAIL;
-
-    return new Response(JSON.stringify(response));
+    return new Response(JSON.stringify(STATUSES.CONFIRM_EMAIL));
   }
 
   //Пользователь не зарегистрирован
@@ -81,15 +77,13 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log('PROFILE', profile);
-
     const newConfirmationCode = generateConfirmationCode();
 
     await prisma.confirmationCode.create({
       data: { code: newConfirmationCode, profileId: profile.id },
     });
 
-    sendConfirmationCode(profile.email, newConfirmationCode);
+    await sendConfirmationCode(profile.email, newConfirmationCode);
 
     return new Response(JSON.stringify(STATUSES.CONFIRM_EMAIL));
   }
