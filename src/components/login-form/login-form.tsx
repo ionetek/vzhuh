@@ -1,13 +1,11 @@
-import { Button } from '@nextui-org/react';
-import { useFormik } from 'formik';
-import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { FormikProvider, useFormik } from 'formik';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 
-import { FadedBlock } from '@/components/faded-block/faded-block';
-import { FormikErrorToast } from '@/components/formik-error-toast/formik-error-toast';
-import { Input } from '@/components/input/input';
+import { ConfirmationCodeInput } from '@/components/login-form/components/confirmation-code-input/confirmation-code-input';
+import { EmailInput } from '@/components/login-form/components/email-input/email-input';
+import { LoginFormikValues } from '@/types/login';
 
 enum STEPS {
   EMAIL,
@@ -17,9 +15,9 @@ enum STEPS {
 
 export const LoginForm = () => {
   const [step, setStep] = useState(STEPS.EMAIL);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
-  const formik = useFormik({
+  const formik = useFormik<LoginFormikValues>({
     initialValues: {
       email: '',
       confirmationCode: '',
@@ -27,109 +25,41 @@ export const LoginForm = () => {
     validationSchema: Yup.object({
       email: Yup.string().email('Неверный email').required('Введите email'),
     }),
-    onSubmit: () => {
-      setStep(STEPS.CODE_CONFIRMATION);
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      await fetch('/api/login', {
+        method: 'post',
+        body: JSON.stringify({ email: values.email }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 'CONFIRM_EMAIL') {
+            setStep(STEPS.CODE_CONFIRMATION);
+          } else {
+            toast.error(res.message);
+          }
+
+          setIsLoading(false);
+        })
+        .catch(() => {
+          toast.error('Ошибка соединения');
+        });
     },
     validateOnChange: false,
     isInitialValid: false,
   });
 
-  const validateCode = (code: string) => {
-    if (code === '1996') {
-      router.push('/my/orders');
-    } else {
-      toast.dismiss();
-      toast.error('Неверный код');
-    }
-  };
-
-  const onConfirmationCodeChange = (e: FormEvent<HTMLInputElement>) => {
-    const code = e.currentTarget.value;
-    formik.setFieldValue('confirmationCode', code.slice(0, 4));
-
-    if (code.length === 4) validateCode(code);
-  };
-
-  const changeEmail = () => {
-    formik.setFieldValue('confirmationCode', '');
+  const onNavigateToEmail = () => {
     setStep(STEPS.EMAIL);
   };
 
-  const resendCode = () => {
-    toast.success('Новый код отправлен');
-  };
-
   return (
-    <div>
-      {step === STEPS.EMAIL && (
-        <FadedBlock>
-          <form onSubmit={formik.handleSubmit}>
-            <div className='flex w-full flex-col gap-4'>
-              {!formik.isValidating && <FormikErrorToast errors={formik.errors} />}
-              <h1 className='text-2xl font-bold'>
-                Введите email&nbsp;
-                <br />
-                для входа&nbsp;или&nbsp;регистрации
-              </h1>
+    <FormikProvider value={formik}>
+      {/*Ввод email*/}
+      {step === STEPS.EMAIL && <EmailInput isLoading={isLoading} />}
 
-              <Input
-                type='text'
-                placeholder='Email'
-                variant='lg'
-                name='email'
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                autoFocus
-                keepFocus
-                autoCapitalize='none'
-                autoCorrect='off'
-              />
-
-              <Button size='lg' color='primary' radius='md' fullWidth type='submit'>
-                Продолжить
-              </Button>
-            </div>
-          </form>
-        </FadedBlock>
-      )}
-
-      {step === STEPS.CODE_CONFIRMATION && (
-        <FadedBlock className='flex w-full flex-col gap-4'>
-          <h1 className='text-2xl font-bold'>
-            Введите код,&nbsp;
-            <br />
-            отправленный&nbsp;на&nbsp;email
-          </h1>
-
-          <Input
-            type='number'
-            placeholder='****'
-            variant='lg'
-            name='confirmationCode'
-            value={formik.values.confirmationCode}
-            onChange={onConfirmationCodeChange}
-            autoFocus
-            keepFocus
-            pattern='[0-9]*'
-            maxLength={4}
-          />
-
-          <div className='flex flex-col gap-4 text-xs'>
-            <div>
-              <p className='text-slate-400'>Отправили код на {formik.values.email}</p>
-              <p className='text-slate-400'>Если код не приходит, проверьте папку &quot;Спам&quot;</p>
-            </div>
-            <div className='flex gap-4'>
-              <a className='cursor-pointer text-blue-600' onClick={resendCode}>
-                Отправить код повторно
-              </a>
-              <a className='cursor-pointer text-blue-600' onClick={changeEmail}>
-                Изменить email
-              </a>
-            </div>
-          </div>
-        </FadedBlock>
-      )}
-    </div>
+      {/*Ввод кода подтвержения*/}
+      {step === STEPS.CODE_CONFIRMATION && <ConfirmationCodeInput onNavigateToEmail={onNavigateToEmail} />}
+    </FormikProvider>
   );
 };
