@@ -54,8 +54,27 @@ export const ConfirmationCodeInput: FC<Props> = ({ onNavigateToEmail }) => {
     onNavigateToEmail();
   };
 
-  const resendCode = () => {
-    toast.success('Новый код отправлен');
+  const resendCode = async () => {
+    toast.dismiss();
+    setIsLoading(true);
+    await fetch('/api/login', {
+      method: 'post',
+      body: JSON.stringify({ email: formik.values.email }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 'CONFIRM_EMAIL') {
+          toast.success('Новый код отправлен');
+        } else {
+          toast.error(res.message);
+        }
+
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toast.error('Ошибка соединения');
+      });
+    setIsLoading(false);
   };
 
   return (
