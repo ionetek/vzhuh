@@ -27,27 +27,6 @@ export const OrderItem: FC<Props> = ({ order }) => {
       <div className='flex flex-col items-end'>
         <span className='whitespace-nowrap text-base font-medium'>{order.total} ₽</span>
       </div>
-      {/*<OzonLogo className='row-span-2' />
-
-      <div className='flex flex-col gap-2'>
-        <div className='flex flex-col items-start gap-2 tablet:flex-row tablet:items-center tablet:gap-4'>
-          <span className='whitespace-nowrap text-base font-medium'>{order.id}</span>
-          <Badge>{order.status}</Badge>
-        </div>
-      </div>
-
-      <div className='flex flex-col items-end'>
-        <span className='whitespace-nowrap text-base font-medium'>{order.total} ₽</span>
-      </div>
-
-      <div className='col-start-2 text-sm text-slate-400'>
-        <span className='whitespace-nowrap'>{order.customer}</span> •{' '}
-        <span className='whitespace-nowrap'>{order.deliveryMethod}</span>
-      </div>
-
-      <div className='flex flex-col items-end'>
-        <span className='text-sm text-slate-400'>{order.createdAt}</span>
-      </div>*/}
     </Link>
   );
 };

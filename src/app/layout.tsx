@@ -20,9 +20,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <link rel='apple-touch-icon' href='/images/standalone/icon-512.png' />
       <meta name='apple-mobile-web-app-status-bar-style' content='default' />
       <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
-      <body className={cn(inter.className)}>
+      <body className={cn(inter.className, 'bg-white transition-background')}>
         <Toaster />
+
         {children}
+
+        <div id='portal' />
       </body>
     </html>
   );

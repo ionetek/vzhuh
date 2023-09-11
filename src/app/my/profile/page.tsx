@@ -14,7 +14,7 @@ export default function Profile() {
       <Screen screenRef={profileScreenRef}>
         <TopNavigation center='Профиль' title='Профиль' screenRef={profileScreenRef} />
         <div className='px-4'>
-          <Link href='/login'>
+          <Link href='/login?s'>
             <Button color='secondary' variant='lg'>
               Выйти из аккаунта
             </Button>

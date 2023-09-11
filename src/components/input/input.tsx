@@ -51,7 +51,7 @@ export const Input: FC<Props> = ({
         'gap-2': variant === 'xl',
       })}
     >
-      <div className={cn('text-slate-400', variant === 'lg' && 'text-sm')}>{label}</div>
+      {label && <div className={cn('text-slate-400', variant === 'lg' && 'text-sm')}>{label}</div>}
       <div className='relative'>
         <input
           className={cn('w-full appearance-none', 'outline-none', className, {
