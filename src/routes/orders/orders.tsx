@@ -26,6 +26,7 @@ const valuesToQuery = (values: FilterOrdersValues) => {
 
   if (values.status !== STATUS.ALL) cleanValues.status = values.status;
   if (values.source !== SOURCE.ALL) cleanValues.source = values.source;
+
   if (values.dates.length) cleanValues.dates = values.dates.join(',');
 
   return cleanValues;
