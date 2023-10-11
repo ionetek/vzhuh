@@ -1,18 +1,19 @@
 import cn from 'clsx';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, ReactNode, RefObject } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import CloseIcon from '/public/icons/close-icon.svg';
 import { Portal } from '@/components/ portal/portal';
-import { createArray } from '@/helpers/create-array/create-array';
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
   title: string;
+  footer?: ReactNode;
+  contentRef?: RefObject<HTMLDivElement>;
 };
 
-export const BottomSheet: FC<PropsWithChildren<Props>> = ({ children, isOpen, onClose, title }) => {
+export const BottomSheet: FC<PropsWithChildren<Props>> = ({ children, isOpen, onClose, title, footer, contentRef }) => {
   const swipeHandlersBg = useSwipeable({
     onSwipedDown: (eventData) => {
       if (eventData.absX > 0) {
@@ -53,16 +54,14 @@ export const BottomSheet: FC<PropsWithChildren<Props>> = ({ children, isOpen, on
             <CloseIcon />
           </a>
         </div>
-        <div className='h-[calc(100%_-_56px)] overflow-y-scroll p-4'>
+        <div
+          className={cn('overflow-y-scroll p-4', footer ? 'h-[calc(100%_-_137px)]' : 'h-[calc(100%_-_56px)]')}
+          ref={contentRef}
+        >
           {children}
-          {createArray(30).map((i) => (
-            <p key={i}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam dolore ducimus earum excepturi iste
-              minus neque perferendis porro, praesentium quas quod reiciendis rem, totam voluptas voluptatibus? Atque
-              recusandae reprehenderit unde.
-            </p>
-          ))}
         </div>
+
+        {footer && <div className='border-t-1 p-4'>{footer}</div>}
       </div>
     </Portal>
   );

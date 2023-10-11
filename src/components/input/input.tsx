@@ -8,6 +8,7 @@ type Props = {
   variant?: 'lg' | 'xl';
   className?: string;
   onChange?: (e: FormEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
   value?: string;
   maxLength?: number;
   type?: 'text' | 'number';
@@ -31,6 +32,7 @@ export const Input: FC<Props> = ({
   value = '',
   maxLength,
   onChange,
+  onFocus,
   type = 'text',
   disabled = false,
   autoFocus = false,
@@ -75,6 +77,9 @@ export const Input: FC<Props> = ({
             e.preventDefault();
             keepFocus && inputRef.current?.focus();
             onBlur?.();
+          }}
+          onFocus={() => {
+            onFocus?.();
           }}
           ref={inputRef}
           pattern={pattern}
